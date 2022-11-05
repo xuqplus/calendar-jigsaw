@@ -5,7 +5,6 @@ import java.util.Date;
 
 public class Main {
 
-
     public static void main(String[] args) {
         String input = "11/21/2021"; // MM/DD/YYYY
         print(getTargetMatrix(input));
@@ -32,9 +31,9 @@ public class Main {
         int m = dt.getMonth();
         int d = dt.getDate() - 1;
         int w = dt.getDay();
-        a[M[m][0]][M[m][1]] = 2;
-        a[D[d][0]][D[d][1]] = 2;
-        a[W[w][0]][W[w][1]] = 2;
+        a[M[m][0]][M[m][1]] = 1;
+        a[D[d][0]][D[d][1]] = 1;
+        a[W[w][0]][W[w][1]] = 1;
         return a;
     }
 
@@ -49,23 +48,12 @@ public class Main {
         return a;
     }
 
-    static void print(int[][] a) {
-        if (null == a) {
+    public static void print(int[][] a) {
+        if (null == a || a.length <= 0 || a[0].length <= 0) {
             return;
         }
-        if (a.length != 8) {
-            return;
+        for (int[] a0 : a) {
+            System.out.println(Arrays.toString(a0));
         }
-        if (a[0].length != 7) {
-            return;
-        }
-        System.out.println(Arrays.toString(a[0]));
-        System.out.println(Arrays.toString(a[1]));
-        System.out.println(Arrays.toString(a[2]));
-        System.out.println(Arrays.toString(a[3]));
-        System.out.println(Arrays.toString(a[4]));
-        System.out.println(Arrays.toString(a[5]));
-        System.out.println(Arrays.toString(a[6]));
-        System.out.println(Arrays.toString(a[7]));
     }
 }
