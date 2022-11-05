@@ -61,7 +61,9 @@ public class Matrix {
             return new int[0][0];
         }
         int[][] b = new int[a.length][a[0].length];
-        System.arraycopy(a, 1, b, 0, b.length - 1);
+        for (int i = 1; i < b.length; i++) {
+            System.arraycopy(a[i], 0, b[i - 1], 0, b[0].length);
+        }
         return b;
     }
 
@@ -70,7 +72,9 @@ public class Matrix {
             return new int[0][0];
         }
         int[][] b = new int[a.length][a[0].length];
-        System.arraycopy(a, 0, b, 1, b.length - 1);
+        for (int i = 0; i < b.length - 1; i++) {
+            System.arraycopy(a[i], 0, b[i + 1], 0, b[0].length);
+        }
         return b;
     }
 
@@ -143,6 +147,33 @@ public class Matrix {
             }
         }
         return b;
+    }
+
+    // a <= b
+    public static int[][] expand(int[][] a, int[][] b) {
+        if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
+            throw new RuntimeException();
+        }
+        for (int i = 0; i < Math.min(a.length, b.length); i++) {
+            for (int j = 0; j < Math.min(a[0].length, b[0].length); j++) {
+                System.arraycopy(a[i], 0, b[i], 0, a[0].length);
+            }
+        }
+        return b;
+    }
+
+    // a <= b
+    public static int[][] merge(int[][] a, int[][] b) {
+        int[][] c = new int[b.length][b[0].length];
+        for (int i = 0; i < b.length; i++) {
+            System.arraycopy(b[i], 0, c[i], 0, b[i].length);
+        }
+        for (int i = 0; i < Math.min(a.length, b.length); i++) {
+            for (int j = 0; j < Math.min(a[0].length, b[0].length); j++) {
+                c[i][j] += a[i][j];
+            }
+        }
+        return c;
     }
 
 

@@ -46,14 +46,14 @@ public class MatrixTest {
         check(11 == Matrix.sum(a3, a4));
         check(5 == Matrix.multiply(a3, a4));
         Main.print(a4);
-        System.out.println("----");
 
+        System.out.println("--left/right--");
         int[][] left = Matrix.left(a4);
         Main.print(left);
         int[][] right = Matrix.right(a4);
         Main.print(right);
-        System.out.println("----");
 
+        System.out.println("--up/down--");
         int[][] up = Matrix.up(a4);
         Main.print(up);
         int[][] down = Matrix.down(a4);
@@ -84,6 +84,26 @@ public class MatrixTest {
         Main.print(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4))));
         System.out.println("--move4 after--");
         Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4)))));
+
+        System.out.println("--expand3--");
+        Main.print(Matrix.expand(Matrix.move2TopLeft(r3), new int[8][7]));
+        System.out.println("--expand4--");
+        Main.print(Matrix.expand(r4, new int[8][7]));
+
+        int[][] m7 = {
+                {0, 0, 1, 0, 0, 0, 0},
+                {1, 1, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0}
+        };
+
+        System.out.println("--merge7--");
+        Main.print(Matrix.merge(r4, m7));
+        System.out.println("--m7--");
+        Main.print(m7);
 
     }
 }
