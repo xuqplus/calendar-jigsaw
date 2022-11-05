@@ -2,12 +2,75 @@ package com.company;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Main {
 
+    static int[][] AA = {
+            {1, 1, 0, 0,},
+            {0, 1, 0, 0,},
+            {0, 1, 0, 0,},
+            {0, 1, 0, 0,},
+    }, BB = {
+            {1, 0, 0,},
+            {1, 1, 0,},
+            {1, 1, 0,},
+    }, CC = {
+            {1, 1, 1,},
+            {1, 0, 1,},
+            {0, 0, 0,},
+    }, DD = {
+            {1, 1, 1,},
+            {1, 0, 0,},
+            {1, 0, 0,},
+    }, EE = {
+            {1, 1, 0,},
+            {0, 1, 0,},
+            {0, 1, 1,},
+    }, FF = {
+            {1, 1, 1,},
+            {0, 1, 0,},
+            {0, 1, 0,},
+    }, GG = {
+            {1, 0, 0, 0,},
+            {1, 0, 0, 0,},
+            {1, 0, 0, 0,},
+            {1, 0, 0, 0,},
+    }, HH = {
+            {1, 1, 0,},
+            {0, 1, 0,},
+            {0, 1, 0,},
+    }, II = {
+            {1, 1, 0, 0,},
+            {0, 1, 1, 1,},
+            {0, 0, 0, 0,},
+            {0, 0, 0, 0,},
+    }, JJ = {
+            {1, 1, 0,},
+            {0, 1, 1,},
+            {0, 0, 0,},
+    };
+
+    List<int[][]> elements = Arrays.asList(new int[][][]{
+            AA, BB, CC, DD, EE, FF, GG, HH, II, JJ
+    });
+
     public static void main(String[] args) {
         String input = "11/21/2021"; // MM/DD/YYYY
-        print(getTargetMatrix(input));
+        int[][] target = getTargetMatrix(input);
+        System.out.println("--target--");
+        print(target);
+
+        int[][] aa = Matrix.expand(AA, new int[target.length][target[0].length]);
+        for (int i = 0; i < target.length; i++) {
+            System.out.println("----");
+            if (0 == Matrix.multiply(target, aa)) {
+                print(Matrix.merge(target, aa));
+            }
+            aa = Matrix.right(aa);
+//            for (int j = 0; j < target[0].length; j++) {
+//            }
+        }
     }
 
     static int[][] M = {
