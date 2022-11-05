@@ -1,8 +1,6 @@
 package com.company;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
@@ -51,25 +49,46 @@ public class Main {
             {0, 0, 0,},
     };
 
-    List<int[][]> elements = Arrays.asList(new int[][][]{
-            AA, BB, CC, DD, EE, FF, GG, HH, II, JJ
+    // the sort is part of the algorithm
+    static List<int[][]> ELEMENTS = Arrays.asList(new int[][][]{
+            AA, II, GG, BB, CC, DD, EE, FF, HH, JJ
     });
 
     public static void main(String[] args) {
-        String input = "11/21/2021"; // MM/DD/YYYY
+        String input = "11/05/2022"; // MM/DD/YYYY
         int[][] target = getTargetMatrix(input);
         System.out.println("--target--");
         print(target);
 
-        int[][] aa = Matrix.expand(AA, new int[target.length][target[0].length]);
-        for (int i = 0; i < target.length; i++) {
-            System.out.println("----");
-            if (0 == Matrix.multiply(target, aa)) {
-                print(Matrix.merge(target, aa));
+        final int row = target.length;
+        final int column = target[0].length;
+
+        LinkedList<int[][]> elements = new LinkedList<int[][]>(ELEMENTS);
+        LinkedList<Target> targets = new LinkedList<Target>();
+        targets.add(new Target(target));
+        List<int[][]> possibilities = new LinkedList<int[][]>();
+        for (int[][] element : elements) {
+            int sum = Matrix.sum(element);
+            // array hash code override
+            Set<Direction> directions = Matrix.getPossibleDirections(element);
+            LinkedList<Target> collectTargets = new LinkedList<Target>();
+            while (!targets.isEmpty()) {
+                int[][] currentTarget = targets.removeFirst().target;
+                for (Direction direction : directions) {
+                    for (int i = 0; i < row; i++) {
+                        for (int j = 0; j < column; j++) {
+                            int[][] testElement = Matrix.move(Matrix.expand(direction.element, new int[row][column]), i, j);
+                            // collision detection
+                            if (sum == Matrix.sum(testElement) && Matrix.product(testElement, currentTarget) == 0) {
+                                possibilities.add(testElement);
+                                collectTargets.add(new Target(Matrix.merge(testElement, currentTarget)));
+                            }
+                        }
+                    }
+                }
             }
-            aa = Matrix.right(aa);
-//            for (int j = 0; j < target[0].length; j++) {
-//            }
+            targets.addAll(collectTargets);
+            System.out.println("----");
         }
     }
 

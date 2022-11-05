@@ -30,21 +30,21 @@ public class MatrixTest {
         check(3 == Matrix.sum(a2));
 
         check(3 == Matrix.sum(a, b));
-        check(0 == Matrix.multiply(a, b));
+        check(0 == Matrix.product(a, b));
         check(8 == Matrix.sum(a1, a2));
-        check(3 == Matrix.multiply(a1, a2));
+        check(3 == Matrix.product(a1, a2));
 
         int[][] a3 = {
                 {0, 0, 0}, {0, 1, 1}, {1, 1, 1}
         };
         check(8 == Matrix.sum(a3, a2));
-        check(3 == Matrix.multiply(a3, a2));
+        check(3 == Matrix.product(a3, a2));
 
         int[][] a4 = {
                 {0, 0, 0, 1}, {0, 1, 1, 0}, {1, 1, 1, 0}
         };
         check(11 == Matrix.sum(a3, a4));
-        check(5 == Matrix.multiply(a3, a4));
+        check(5 == Matrix.product(a3, a4));
         Main.print(a4);
 
         System.out.println("--left/right--");
@@ -110,5 +110,7 @@ public class MatrixTest {
         System.out.println("--m7--");
         Main.print(m7);
 
+        System.out.println("--m7--");
+        Main.print(Matrix.move(m7, -1, -1));
     }
 }

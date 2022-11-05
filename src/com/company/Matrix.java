@@ -1,5 +1,8 @@
 package com.company;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Matrix {
     public static int sum(int[][] a) {
         if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
@@ -18,7 +21,7 @@ public class Matrix {
         return sum(a) + sum(b);
     }
 
-    public static int multiply(int[][] a, int[][] b) {
+    public static int product(int[][] a, int[][] b) {
         if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
             return 0;
         }
@@ -32,6 +35,22 @@ public class Matrix {
             }
         }
         return product;
+    }
+
+    // down = 1 > move down 1 step, right = 1 > move to right 1 step
+    public static int[][] move(int[][] a, int down, int right) {
+        if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
+            return new int[0][0];
+        }
+        int[][] b = new int[a.length][a[0].length];
+        for (int i = 0; i < b.length - down; i++) {
+            try {
+                System.arraycopy(a[i], 0, b[i + down], Math.max(right, 0), Math.min(b[0].length - right, b[0].length));
+            } catch (Exception e) {
+                // pass
+            }
+        }
+        return b;
     }
 
     public static int[][] left(int[][] a) {
@@ -198,5 +217,26 @@ public class Matrix {
         return c;
     }
 
+    // up to 8 different locations
+    public static Set<Direction> getPossibleDirections(int[][] a) {
+        Set<Direction> result = new HashSet<Direction>();
+        int[][] a0 = move2TopLeft(a);
+        int[][] a1 = move2TopLeft(rotate(a0));
+        int[][] a2 = move2TopLeft(rotate(a1));
+        int[][] a3 = move2TopLeft(rotate(a2));
 
+        int[][] a4 = move2TopLeft(mirror(a));
+        int[][] a5 = move2TopLeft(rotate(a4));
+        int[][] a6 = move2TopLeft(rotate(a5));
+        int[][] a7 = move2TopLeft(rotate(a6));
+        result.add(new Direction(a0));
+        result.add(new Direction(a1));
+        result.add(new Direction(a2));
+        result.add(new Direction(a3));
+        result.add(new Direction(a4));
+        result.add(new Direction(a5));
+        result.add(new Direction(a6));
+        result.add(new Direction(a7));
+        return result;
+    }
 }
