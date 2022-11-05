@@ -58,5 +58,32 @@ public class MatrixTest {
         Main.print(up);
         int[][] down = Matrix.down(a4);
         Main.print(down);
+
+        int[][] r3 = {
+                {0, 1, 0,},
+                {0, 1, 1,},
+                {0, 1, 1,},
+        };
+        int[][] r4 = {
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {1, 1, 0, 0}
+        };
+        System.out.println("--rotate3--");
+        Main.print(Matrix.rotate(r3));
+        System.out.println("--double rotate3--");
+        Main.print(Matrix.rotate(Matrix.rotate(r3)));
+        System.out.println("--rotate4--");
+        Main.print(Matrix.rotate(r4));
+        System.out.println("--double rotate4--");
+        Main.print(Matrix.rotate(Matrix.rotate(r4)));
+        System.out.println("--move--");
+        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(r4))));
+        System.out.println("--move4 before--");
+        Main.print(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4))));
+        System.out.println("--move4 after--");
+        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4)))));
+
     }
 }

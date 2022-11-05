@@ -74,4 +74,76 @@ public class Matrix {
         return b;
     }
 
+    // rotate 90 degrees
+    public static int[][] rotate(int[][] a) {
+        if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
+            throw new RuntimeException();
+        }
+        if ((a.length != a[0].length) || (a.length != 3 && a.length != 4)) {
+            throw new RuntimeException();
+        }
+        int[][] b = new int[a.length][a[0].length];
+        if (a.length == 3) {
+            b[0][0] = a[2][0];
+            b[0][1] = a[1][0];
+            b[0][2] = a[0][0];
+            b[1][0] = a[2][1];
+            b[1][1] = a[1][1];
+            b[1][2] = a[0][1];
+            b[2][0] = a[2][2];
+            b[2][1] = a[1][2];
+            b[2][2] = a[0][2];
+        }
+        if (a.length == 4) {
+            b[0][0] = a[3][0];
+            b[0][1] = a[2][0];
+            b[0][2] = a[1][0];
+            b[0][3] = a[0][0];
+            b[1][0] = a[3][1];
+            b[1][1] = a[2][1];
+            b[1][2] = a[1][1];
+            b[1][3] = a[0][1];
+            b[2][0] = a[3][2];
+            b[2][1] = a[2][2];
+            b[2][2] = a[1][2];
+            b[2][3] = a[0][2];
+            b[3][0] = a[3][3];
+            b[3][1] = a[2][3];
+            b[3][2] = a[1][3];
+            b[3][3] = a[0][3];
+        }
+        return b;
+    }
+
+    public static int[][] move2TopLeft(int[][] a) {
+        if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
+            throw new RuntimeException();
+        }
+        if ((a.length != a[0].length) || (a.length != 3 && a.length != 4)) {
+            throw new RuntimeException();
+        }
+        int[][] b = a;
+        int sum = sum(a);
+        while (true) {
+            int[][] t = left(b);
+            int s = sum(t);
+            if (s == sum) {
+                b = t;
+            } else {
+                break;
+            }
+        }
+        while (true) {
+            int[][] t = up(b);
+            int s = sum(t);
+            if (s == sum) {
+                b = t;
+            } else {
+                break;
+            }
+        }
+        return b;
+    }
+
+
 }
