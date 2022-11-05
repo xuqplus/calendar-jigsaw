@@ -84,6 +84,11 @@ public class MatrixTest {
         Main.print(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4))));
         System.out.println("--move4 after--");
         Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4)))));
+        System.out.println("--mirror--");
+        Main.print(Matrix.mirror(r4));
+        System.out.println("--mirror r4--");
+        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.mirror(r4))));
+        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(Matrix.mirror(r4)))));
 
         System.out.println("--expand3--");
         Main.print(Matrix.expand(Matrix.move2TopLeft(r3), new int[8][7]));

@@ -119,6 +119,28 @@ public class Matrix {
         return b;
     }
 
+    public static int[][] mirror(int[][] a) {
+        if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
+            throw new RuntimeException();
+        }
+        if ((a.length != a[0].length) || (a.length != 3 && a.length != 4)) {
+            throw new RuntimeException();
+        }
+        int[][] b = new int[a.length][a[0].length];
+        if (a.length == 3) {
+            System.arraycopy(a[0], 0, b[2], 0, 3);
+            System.arraycopy(a[1], 0, b[1], 0, 3);
+            System.arraycopy(a[2], 0, b[0], 0, 3);
+        }
+        if (a.length == 4) {
+            System.arraycopy(a[3], 0, b[0], 0, 4);
+            System.arraycopy(a[2], 0, b[1], 0, 4);
+            System.arraycopy(a[1], 0, b[2], 0, 4);
+            System.arraycopy(a[0], 0, b[3], 0, 4);
+        }
+        return b;
+    }
+
     public static int[][] move2TopLeft(int[][] a) {
         if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
             throw new RuntimeException();
