@@ -1,7 +1,7 @@
 package com.company.test;
 
 import com.company.Main;
-import com.company.Matrix;
+import com.company.MatrixUtil;
 
 public class MatrixTest {
     static void check(boolean b) {
@@ -14,49 +14,49 @@ public class MatrixTest {
         int[][] a = {
                 {0}, {1}, {1}
         };
-        check(2 == Matrix.sum(a));
+        check(2 == MatrixUtil.sum(a));
         int[][] b = {
                 {1}, {0}, {0}
         };
-        check(1 == Matrix.sum(b));
+        check(1 == MatrixUtil.sum(b));
 
         int[][] a1 = {
                 {0, 1}, {1, 1}, {1, 1}
         };
-        check(5 == Matrix.sum(a1));
+        check(5 == MatrixUtil.sum(a1));
         int[][] a2 = {
                 {0, 0}, {0, 1}, {1, 1}
         };
-        check(3 == Matrix.sum(a2));
+        check(3 == MatrixUtil.sum(a2));
 
-        check(3 == Matrix.sum(a, b));
-        check(0 == Matrix.product(a, b));
-        check(8 == Matrix.sum(a1, a2));
-        check(3 == Matrix.product(a1, a2));
+        check(3 == MatrixUtil.sum(a, b));
+        check(0 == MatrixUtil.product(a, b));
+        check(8 == MatrixUtil.sum(a1, a2));
+        check(3 == MatrixUtil.product(a1, a2));
 
         int[][] a3 = {
                 {0, 0, 0}, {0, 1, 1}, {1, 1, 1}
         };
-        check(8 == Matrix.sum(a3, a2));
-        check(3 == Matrix.product(a3, a2));
+        check(8 == MatrixUtil.sum(a3, a2));
+        check(3 == MatrixUtil.product(a3, a2));
 
         int[][] a4 = {
                 {0, 0, 0, 1}, {0, 1, 1, 0}, {1, 1, 1, 0}
         };
-        check(11 == Matrix.sum(a3, a4));
-        check(5 == Matrix.product(a3, a4));
+        check(11 == MatrixUtil.sum(a3, a4));
+        check(5 == MatrixUtil.product(a3, a4));
         Main.print(a4);
 
         System.out.println("--left/right--");
-        int[][] left = Matrix.left(a4);
+        int[][] left = MatrixUtil.left(a4);
         Main.print(left);
-        int[][] right = Matrix.right(a4);
+        int[][] right = MatrixUtil.right(a4);
         Main.print(right);
 
         System.out.println("--up/down--");
-        int[][] up = Matrix.up(a4);
+        int[][] up = MatrixUtil.up(a4);
         Main.print(up);
-        int[][] down = Matrix.down(a4);
+        int[][] down = MatrixUtil.down(a4);
         Main.print(down);
 
         int[][] r3 = {
@@ -71,29 +71,29 @@ public class MatrixTest {
                 {1, 1, 0, 0}
         };
         System.out.println("--rotate3--");
-        Main.print(Matrix.rotate(r3));
+        Main.print(MatrixUtil.rotate(r3));
         System.out.println("--double rotate3--");
-        Main.print(Matrix.rotate(Matrix.rotate(r3)));
+        Main.print(MatrixUtil.rotate(MatrixUtil.rotate(r3)));
         System.out.println("--rotate4--");
-        Main.print(Matrix.rotate(r4));
+        Main.print(MatrixUtil.rotate(r4));
         System.out.println("--double rotate4--");
-        Main.print(Matrix.rotate(Matrix.rotate(r4)));
+        Main.print(MatrixUtil.rotate(MatrixUtil.rotate(r4)));
         System.out.println("--move--");
-        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(r4))));
+        Main.print(MatrixUtil.move2TopLeft(MatrixUtil.rotate(MatrixUtil.rotate(r4))));
         System.out.println("--move4 before--");
-        Main.print(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4))));
+        Main.print(MatrixUtil.rotate(MatrixUtil.rotate(MatrixUtil.rotate(r4))));
         System.out.println("--move4 after--");
-        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(Matrix.rotate(r4)))));
+        Main.print(MatrixUtil.move2TopLeft(MatrixUtil.rotate(MatrixUtil.rotate(MatrixUtil.rotate(r4)))));
         System.out.println("--mirror--");
-        Main.print(Matrix.mirror(r4));
+        Main.print(MatrixUtil.mirror(r4));
         System.out.println("--mirror r4--");
-        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.mirror(r4))));
-        Main.print(Matrix.move2TopLeft(Matrix.rotate(Matrix.rotate(Matrix.mirror(r4)))));
+        Main.print(MatrixUtil.move2TopLeft(MatrixUtil.rotate(MatrixUtil.mirror(r4))));
+        Main.print(MatrixUtil.move2TopLeft(MatrixUtil.rotate(MatrixUtil.rotate(MatrixUtil.mirror(r4)))));
 
         System.out.println("--expand3--");
-        Main.print(Matrix.expand(Matrix.move2TopLeft(r3), new int[8][7]));
+        Main.print(MatrixUtil.expand(MatrixUtil.move2TopLeft(r3), 8, 7));
         System.out.println("--expand4--");
-        Main.print(Matrix.expand(r4, new int[8][7]));
+        Main.print(MatrixUtil.expand(r4, 8, 7));
 
         int[][] m7 = {
                 {0, 0, 1, 0, 0, 0, 0},
@@ -106,11 +106,11 @@ public class MatrixTest {
         };
 
         System.out.println("--merge7--");
-        Main.print(Matrix.merge(r4, m7));
+        Main.print(MatrixUtil.merge(r4, m7));
         System.out.println("--m7--");
         Main.print(m7);
 
         System.out.println("--m7--");
-        Main.print(Matrix.move(m7, -1, -1));
+        Main.print(MatrixUtil.move(m7, -1, -1));
     }
 }

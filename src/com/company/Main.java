@@ -49,47 +49,42 @@ public class Main {
             {0, 0, 0,},
     };
 
-    // the sort is part of the algorithm
-    static List<int[][]> ELEMENTS = Arrays.asList(new int[][][]{
-            AA, II, GG, BB, CC, DD, EE, FF, HH, JJ
-    });
+    static Map<String, int[][]> ELEMENTS = new HashMap<String, int[][]>() {{
+        put("AA", AA);
+        put("BB", BB);
+        put("CC", CC);
+        put("DD", DD);
+        put("EE", EE);
+        put("FF", FF);
+        put("HH", HH);
+        put("II", II);
+        put("JJ", JJ);
+    }};
 
     public static void main(String[] args) {
         String input = "11/05/2022"; // MM/DD/YYYY
-        int[][] target = getTargetMatrix(input);
+        Matrix target = new Matrix(getTargetMatrix(input));
         System.out.println("--target--");
         print(target);
 
-        final int row = target.length;
-        final int column = target[0].length;
 
-        LinkedList<int[][]> elements = new LinkedList<int[][]>(ELEMENTS);
-        LinkedList<Target> targets = new LinkedList<Target>();
-        targets.add(new Target(target));
-        List<int[][]> possibilities = new LinkedList<int[][]>();
-        for (int[][] element : elements) {
-            int sum = Matrix.sum(element);
-            // array hash code override
-            Set<Direction> directions = Matrix.getPossibleDirections(element);
-            LinkedList<Target> collectTargets = new LinkedList<Target>();
-            while (!targets.isEmpty()) {
-                int[][] currentTarget = targets.removeFirst().target;
-                for (Direction direction : directions) {
-                    for (int i = 0; i < row; i++) {
-                        for (int j = 0; j < column; j++) {
-                            int[][] testElement = Matrix.move(Matrix.expand(direction.element, new int[row][column]), i, j);
-                            // collision detection
-                            if (sum == Matrix.sum(testElement) && Matrix.product(testElement, currentTarget) == 0) {
-                                possibilities.add(testElement);
-                                collectTargets.add(new Target(Matrix.merge(testElement, currentTarget)));
-                            }
-                        }
-                    }
-                }
+        LinkedList<Matrix> matrices = new LinkedList<>();
+        for (Map.Entry<String, int[][]> entry : ELEMENTS.entrySet()) {
+            String name = entry.getKey();
+            int[][] element = entry.getValue();
+            Set<Matrix> directions = MatrixUtil.getPossibleDirections(element);
+            int directionOrder = 0;
+            for (Matrix direction : directions) {
+                Matrix expanded = MatrixUtil.expand(direction, target);
+                int possibility = MatrixUtil.getPossiblePlacements(expanded, target);
+                expanded.elementKey = name;
+                expanded.placementName = name + directionOrder++;
+                expanded.possibility = possibility;
+                matrices.add(expanded);
             }
-            targets.addAll(collectTargets);
-            System.out.println("----");
         }
+        Collections.sort(matrices, Comparator.comparingInt(o -> o.possibility));
+        System.out.println("----");
     }
 
     static int[][] M = {
@@ -131,11 +126,15 @@ public class Main {
     }
 
     public static void print(int[][] a) {
-        if (null == a || a.length <= 0 || a[0].length <= 0) {
+        if (MatrixUtil.isEmpty(a)) {
             return;
         }
         for (int[] a0 : a) {
             System.out.println(Arrays.toString(a0));
         }
+    }
+
+    public static void print(Matrix a) {
+        print(a.array);
     }
 }

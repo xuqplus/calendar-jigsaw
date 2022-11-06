@@ -1,31 +1,12 @@
 package com.company;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 
-public class Matrix {
-    public int[][] array;
-    // placement group
-    public Matrix target;
-    public String elementKey;
-    public String placementName; // element + direction
-    public int possibility;
-    public LinkedList<Matrix> possiblePlacements;
-    // end placement group
+public class Element {
+    public final int[][] array;
 
-    public Matrix() {
-    }
-
-    public Matrix(int[][] array) {
+    public Element(int[][] array) {
         this.array = array;
-    }
-
-    public int getRow() {
-        return this.array.length;
-    }
-
-    public int getColumn() {
-        return this.array[0].length;
     }
 
     @Override
@@ -46,8 +27,6 @@ public class Matrix {
         return true;
     }
 
-    // array hash code override
-    // collision detection
     @Override
     public int hashCode() {
         try {
