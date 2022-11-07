@@ -2,18 +2,28 @@ package com.company;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class Matrix {
     public int[][] array;
     // placement group
-    public Matrix target;
     public String elementKey;
     public String placementName; // element + direction
     public int possibility;
     public LinkedList<Matrix> possiblePlacements;
     // end placement group
 
+    // solution path
+    public Set<String> keys;
+    public Set<Matrix> solutions;
+    // end solution path
+
     public Matrix() {
+    }
+
+    public Matrix(String elementKey) {
+        this.elementKey = elementKey;
+        this.possiblePlacements = new LinkedList<>();
     }
 
     public Matrix(int[][] array) {

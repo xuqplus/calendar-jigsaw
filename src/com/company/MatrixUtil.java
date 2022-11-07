@@ -259,7 +259,7 @@ public class MatrixUtil {
     }
 
     // merge matrix into target without collision
-    public static int getPossiblePlacements(Matrix matrix, Matrix target) {
+    public static LinkedList<Matrix> getPossiblePlacements(Matrix matrix, Matrix target) {
         if (isEmpty(matrix) || isEmpty(target)) {
             throw new RuntimeException();
         }
@@ -268,14 +268,45 @@ public class MatrixUtil {
         }
         final int row = target.array.length;
         final int column = target.array[0].length;
-        int r = 0;
+        LinkedList<Matrix> r = new LinkedList<>();
         matrix.possiblePlacements = new LinkedList<>();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 int[][] moved = move(matrix.array, i, j);
                 if (0 == (product(moved, target.array))) {
-                    r++;
-                    matrix.possiblePlacements.add(new Matrix(moved));
+                    Matrix merged = new Matrix(merge(moved, target.array));
+                    r.add(merged);
+                    merged.keys = new HashSet<>();
+                    merged.keys.add(matrix.elementKey);
+                    merged.solutions = new HashSet<>();
+                    merged.solutions.add(new Matrix(moved));
+                }
+            }
+        }
+        return r;
+    }
+
+    public static Matrix cartesianProduct(Matrix a, Matrix b) {
+        if (null == a.possiblePlacements || null == b.possiblePlacements || a.possiblePlacements.size() <= 0 || b.possiblePlacements.size() <= 0) {
+            throw new RuntimeException();
+        }
+        Matrix r = new Matrix();
+        r.keys = new HashSet<>();
+        r.keys.addAll(a.keys);
+        r.keys.addAll(b.keys);
+        for (Matrix aa : a.possiblePlacements) {
+            for (Matrix bb : b.possiblePlacements) {
+                if (9 == product(aa.array, bb.array)) { // fixed dots
+                    Matrix merged = new Matrix(merge(aa.array, bb.array));
+                    if (null == r.possiblePlacements) {
+                        r.possiblePlacements = new LinkedList();
+                    }
+                    r.possiblePlacements.add(merged);
+                    r.possibility++;
+                    merged.keys = r.keys;
+                    merged.solutions = new HashSet<>();
+                    merged.solutions.addAll(aa.solutions);
+                    merged.solutions.addAll(bb.solutions);
                 }
             }
         }

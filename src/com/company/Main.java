@@ -56,6 +56,7 @@ public class Main {
         put("DD", DD);
         put("EE", EE);
         put("FF", FF);
+        put("GG", GG);
         put("HH", HH);
         put("II", II);
         put("JJ", JJ);
@@ -67,7 +68,6 @@ public class Main {
         System.out.println("--target--");
         print(target);
 
-
         LinkedList<Matrix> matrices = new LinkedList<>();
         for (Map.Entry<String, int[][]> entry : ELEMENTS.entrySet()) {
             String name = entry.getKey();
@@ -76,14 +76,36 @@ public class Main {
             int directionOrder = 0;
             for (Matrix direction : directions) {
                 Matrix expanded = MatrixUtil.expand(direction, target);
-                int possibility = MatrixUtil.getPossiblePlacements(expanded, target);
+                LinkedList<Matrix> placements = MatrixUtil.getPossiblePlacements(expanded, target);
                 expanded.elementKey = name;
                 expanded.placementName = name + directionOrder++;
-                expanded.possibility = possibility;
+                expanded.possibility = placements.size();
+                expanded.possiblePlacements = placements;
                 matrices.add(expanded);
             }
         }
         Collections.sort(matrices, Comparator.comparingInt(o -> o.possibility));
+        Map<String, Matrix> matricesMapGroupedByKey = new LinkedHashMap<>();
+        for (Matrix matrix : matrices) {
+            String elementKey = matrix.elementKey;
+            if (!matricesMapGroupedByKey.containsKey(elementKey)) {
+                matricesMapGroupedByKey.put(elementKey, new Matrix(elementKey));
+            }
+            Matrix matrixGrouped = matricesMapGroupedByKey.get(elementKey);
+            matrixGrouped.possiblePlacements.addAll(matrix.possiblePlacements);
+            matrixGrouped.possibility += matrix.possibility;
+            matrixGrouped.keys = new HashSet<>();
+            matrixGrouped.keys.add(elementKey);
+        }
+        LinkedList<Matrix> matricesGroupedByKey = new LinkedList<>(matricesMapGroupedByKey.values());
+        while (matricesGroupedByKey.size() > 1) {
+            System.out.println("----");
+            Collections.sort(matricesGroupedByKey, Comparator.comparingInt(o -> o.possibility));
+            Matrix first = matricesGroupedByKey.removeFirst();
+            Matrix second = matricesGroupedByKey.removeFirst();
+            Matrix product = MatrixUtil.cartesianProduct(first, second);
+            matricesGroupedByKey.add(product);
+        }
         System.out.println("----");
     }
 
