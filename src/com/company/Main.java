@@ -68,7 +68,7 @@ public class Main {
         System.out.println("--target--");
         print(target);
 
-        Map<String, List<Long>> placementMap = new LinkedHashMap<>();
+        Map<String, Set<Long>> placementMap = new LinkedHashMap<>();
         for (Map.Entry<String, int[][]> entry : ELEMENTS.entrySet()) {
             String key = entry.getKey();
             int[][] element = entry.getValue();
@@ -77,32 +77,28 @@ public class Main {
                 int[][] expanded = MatrixUtil.expand(direction, target.length, target[0].length);
                 List<Long> placements = MatrixUtil.getPossiblePlacements(expanded, target);
                 if (!placementMap.containsKey(key)) {
-                    placementMap.put(key, placements);
-                } else {
-                    placementMap.get(key).addAll(placements);
+                    placementMap.put(key, new HashSet<>());
                 }
+                placementMap.get(key).addAll(placements);
             }
         }
-        List<Long> aa = placementMap.get("AA");
-        List<Long> bb = placementMap.get("BB");
-        List<Long> cc = placementMap.get("CC");
-        List<Long> dd = placementMap.get("DD");
-        List<Long> ee = placementMap.get("EE");
-        List<Long> ff = placementMap.get("FF");
-        List<Long> gg = placementMap.get("GG");
-        List<Long> hh = placementMap.get("HH");
-        List<Long> ii = placementMap.get("II");
-        List<Long> jj = placementMap.get("JJ");
-        List r = new LinkedList<>();
-        int qa = 0;
+        Set<Long> aa = placementMap.get("AA");
+        Set<Long> bb = placementMap.get("BB");
+        Set<Long> cc = placementMap.get("CC");
+        Set<Long> dd = placementMap.get("DD");
+        Set<Long> ee = placementMap.get("EE");
+        Set<Long> ff = placementMap.get("FF");
+        Set<Long> gg = placementMap.get("GG");
+        Set<Long> hh = placementMap.get("HH");
+        Set<Long> ii = placementMap.get("II");
+        Set<Long> jj = placementMap.get("JJ");
+        Set rr = new HashSet();
+        int qq = 0;
         for (Long a : aa) {
-            System.out.println(String.format("---%s/%s", qa++, aa.size()));
-            long a0 = a;
-            int qb = 0;
+            if (qq++ % 5 == 0) System.out.println(String.format("---%s/%s", qq, aa.size()));
             for (Long b : bb) {
-                if (qb++ % 20 == 0) System.out.println(String.format("------%s/%s", qb, bb.size()));
-                if ((a0 & b) != 0) continue;
-                long b0 = a0 | b;
+                if ((a & b) != 0) continue;
+                long b0 = a | b;
                 for (Long c : cc) {
                     if ((b0 & c) != 0) continue;
                     long c0 = b0 | c;
@@ -125,9 +121,11 @@ public class Main {
                                             if ((h0 & i) != 0) continue;
                                             long i0 = h0 | i;
                                             for (Long j : jj) {
-                                                if ((i0 & j) != 0) continue;
-                                                r.add(Arrays.asList(a, b, c, d, e, f, g, h, i, j).toArray());
-                                                System.out.println(String.format("got NO.%s result > ---%s, %s, %s, %s, %s, %s, %s, %s, %s, %s---", r.size(), a, b, c, d, e, f, g, h, i, j));
+                                                if ((i0 & j) == 0) {
+                                                    Object[] r = Arrays.asList(a, b, c, d, e, f, g, h, i, j).stream().sorted().toArray();
+                                                    System.out.println(String.format("Got NO.%s result > %sL, %sL, %sL, %sL, %sL, %sL, %sL, %sL, %sL, %sL", rr.size(), r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9]));
+                                                    rr.add(r);
+                                                }
                                             }
                                         }
                                     }
