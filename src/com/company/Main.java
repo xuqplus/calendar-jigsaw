@@ -64,47 +64,79 @@ public class Main {
 
     public static void main(String[] args) {
         String input = "11/05/2022"; // MM/DD/YYYY
-        Matrix target = new Matrix(getTargetMatrix(input));
+        int[][] target = getTargetMatrix(input);
         System.out.println("--target--");
         print(target);
 
-        LinkedList<Matrix> matrices = new LinkedList<>();
+        Map<String, List<Long>> placementMap = new LinkedHashMap<>();
         for (Map.Entry<String, int[][]> entry : ELEMENTS.entrySet()) {
-            String name = entry.getKey();
+            String key = entry.getKey();
             int[][] element = entry.getValue();
-            Set<Matrix> directions = MatrixUtil.getPossibleDirections(element);
-            int directionOrder = 0;
-            for (Matrix direction : directions) {
-                Matrix expanded = MatrixUtil.expand(direction, target);
-                LinkedList<Matrix> placements = MatrixUtil.getPossiblePlacements(expanded, target);
-                expanded.elementKey = name;
-                expanded.placementName = name + directionOrder++;
-                expanded.possibility = placements.size();
-                expanded.possiblePlacements = placements;
-                matrices.add(expanded);
+            Set<int[][]> directions = MatrixUtil.getPossibleDirections(element);
+            for (int[][] direction : directions) {
+                int[][] expanded = MatrixUtil.expand(direction, target.length, target[0].length);
+                List<Long> placements = MatrixUtil.getPossiblePlacements(expanded, target);
+                if (!placementMap.containsKey(key)) {
+                    placementMap.put(key, placements);
+                } else {
+                    placementMap.get(key).addAll(placements);
+                }
             }
         }
-        Collections.sort(matrices, Comparator.comparingInt(o -> o.possibility));
-        Map<String, Matrix> matricesMapGroupedByKey = new LinkedHashMap<>();
-        for (Matrix matrix : matrices) {
-            String elementKey = matrix.elementKey;
-            if (!matricesMapGroupedByKey.containsKey(elementKey)) {
-                matricesMapGroupedByKey.put(elementKey, new Matrix(elementKey));
+        List<Long> aa = placementMap.get("AA");
+        List<Long> bb = placementMap.get("BB");
+        List<Long> cc = placementMap.get("CC");
+        List<Long> dd = placementMap.get("DD");
+        List<Long> ee = placementMap.get("EE");
+        List<Long> ff = placementMap.get("FF");
+        List<Long> gg = placementMap.get("GG");
+        List<Long> hh = placementMap.get("HH");
+        List<Long> ii = placementMap.get("II");
+        List<Long> jj = placementMap.get("JJ");
+        List r = new LinkedList<>();
+        int qa = 0;
+        for (Long a : aa) {
+            System.out.println(String.format("---%s/%s", qa++, aa.size()));
+            long a0 = a;
+            int qb = 0;
+            for (Long b : bb) {
+                if (qb++ % 20 == 0) System.out.println(String.format("------%s/%s", qb, bb.size()));
+                if ((a0 & b) != 0) continue;
+                long b0 = a0 | b;
+                for (Long c : cc) {
+                    if ((b0 & c) != 0) continue;
+                    long c0 = b0 | c;
+                    for (Long d : dd) {
+                        if ((c0 & d) != 0) continue;
+                        long d0 = c0 | d;
+                        for (Long e : ee) {
+                            if ((d0 & e) != 0) continue;
+                            long e0 = d0 | e;
+                            for (Long f : ff) {
+                                if ((e0 & f) != 0) continue;
+                                long f0 = e0 | f;
+                                for (Long g : gg) {
+                                    if ((f0 & g) != 0) continue;
+                                    long g0 = f0 | g;
+                                    for (Long h : hh) {
+                                        if ((g0 & h) != 0) continue;
+                                        long h0 = g0 | h;
+                                        for (Long i : ii) {
+                                            if ((h0 & i) != 0) continue;
+                                            long i0 = h0 | i;
+                                            for (Long j : jj) {
+                                                if ((i0 & j) != 0) continue;
+                                                r.add(Arrays.asList(a, b, c, d, e, f, g, h, i, j).toArray());
+                                                System.out.println(String.format("got NO.%s result > ---%s, %s, %s, %s, %s, %s, %s, %s, %s, %s---", r.size(), a, b, c, d, e, f, g, h, i, j));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            Matrix matrixGrouped = matricesMapGroupedByKey.get(elementKey);
-            matrixGrouped.possiblePlacements.addAll(matrix.possiblePlacements);
-            matrixGrouped.possibility += matrix.possibility;
-            matrixGrouped.keys = new HashSet<>();
-            matrixGrouped.keys.add(elementKey);
-        }
-        LinkedList<Matrix> matricesGroupedByKey = new LinkedList<>(matricesMapGroupedByKey.values());
-        while (matricesGroupedByKey.size() > 1) {
-            System.out.println("----");
-            Collections.sort(matricesGroupedByKey, Comparator.comparingInt(o -> o.possibility));
-            Matrix first = matricesGroupedByKey.removeFirst();
-            Matrix second = matricesGroupedByKey.removeFirst();
-            Matrix product = MatrixUtil.cartesianProduct(first, second);
-            matricesGroupedByKey.add(product);
         }
         System.out.println("----");
     }
@@ -157,6 +189,6 @@ public class Main {
     }
 
     public static void print(Matrix a) {
-        print(a.array);
+        print(MatrixUtil.longToArray(a.array2d));
     }
 }

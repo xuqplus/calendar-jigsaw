@@ -112,5 +112,15 @@ public class MatrixTest {
 
         System.out.println("--m7--");
         Main.print(MatrixUtil.move(m7, -1, -1));
+
+        long l159 = 0b1001_1111; // 159
+        long l12541343 = 0b1011_1111_0101_1101_1001_1111; // 159
+        check(1L == Long.parseLong("1", 2));
+        check(2L == Long.parseLong("10", 2));
+        check(3L == Long.parseLong("11", 2));
+        int[][] array159 = MatrixUtil.longToArray(l159);
+        int[][] array12541343 = MatrixUtil.longToArray(l12541343);
+        check(l159 == MatrixUtil.arrayToLong(array159));
+        check(l12541343 == MatrixUtil.arrayToLong(array12541343));
     }
 }

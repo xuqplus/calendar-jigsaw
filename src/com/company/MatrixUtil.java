@@ -1,21 +1,14 @@
 package com.company;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class MatrixUtil {
 
     public static boolean isEmpty(int[][] a) {
-        // todo, define what is empty to the matrix
         if (null == a || a.length <= 0 || null == a[0] || a[0].length <= 0) {
             return true;
         }
         return false;
-    }
-
-    public static boolean isEmpty(Matrix a) {
-        return null != a && isEmpty(a.array);
     }
 
     public static int sum(int[][] a) {
@@ -212,15 +205,6 @@ public class MatrixUtil {
         return b;
     }
 
-    public static Matrix expand(Matrix a, Matrix b) {
-        if (isEmpty(b)) {
-            throw new RuntimeException();
-        }
-        final int row = b.array.length;
-        final int column = b.array[0].length;
-        return new Matrix(expand(a.array, row, column));
-    }
-
     // a <= b
     public static int[][] merge(int[][] a, int[][] b) {
         int[][] c = new int[b.length][b[0].length];
@@ -229,15 +213,15 @@ public class MatrixUtil {
         }
         for (int i = 0; i < Math.min(a.length, b.length); i++) {
             for (int j = 0; j < Math.min(a[0].length, b[0].length); j++) {
-                c[i][j] += a[i][j];
+                c[i][j] |= a[i][j];
             }
         }
         return c;
     }
 
     // up to 8 different directions
-    public static Set<Matrix> getPossibleDirections(int[][] a) {
-        Set<Matrix> r = new HashSet<>();
+    public static Set<int[][]> getPossibleDirections(int[][] a) {
+        Set<int[][]> r = new HashSet<>();
         int[][] a0 = move2TopLeft(a);
         int[][] a1 = move2TopLeft(rotate(a0));
         int[][] a2 = move2TopLeft(rotate(a1));
@@ -247,39 +231,31 @@ public class MatrixUtil {
         int[][] a5 = move2TopLeft(rotate(a4));
         int[][] a6 = move2TopLeft(rotate(a5));
         int[][] a7 = move2TopLeft(rotate(a6));
-        r.add(new Matrix(a0));
-        r.add(new Matrix(a1));
-        r.add(new Matrix(a2));
-        r.add(new Matrix(a3));
-        r.add(new Matrix(a4));
-        r.add(new Matrix(a5));
-        r.add(new Matrix(a6));
-        r.add(new Matrix(a7));
+        r.add(a0);
+        r.add(a1);
+        r.add(a2);
+        r.add(a3);
+        r.add(a4);
+        r.add(a5);
+        r.add(a6);
+        r.add(a7);
         return r;
     }
 
     // merge matrix into target without collision
-    public static LinkedList<Matrix> getPossiblePlacements(Matrix matrix, Matrix target) {
+    public static List<Long> getPossiblePlacements(int[][] matrix, int[][] target) {
         if (isEmpty(matrix) || isEmpty(target)) {
             throw new RuntimeException();
         }
-        if (matrix.getRow() != target.getRow() || matrix.getColumn() != target.getColumn()) {
-            throw new RuntimeException();
-        }
-        final int row = target.array.length;
-        final int column = target.array[0].length;
-        LinkedList<Matrix> r = new LinkedList<>();
-        matrix.possiblePlacements = new LinkedList<>();
+        final int row = target.length;
+        final int column = target[0].length;
+        List<Long> r = new ArrayList<>();
+        int sum = sum(matrix);
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
-                int[][] moved = move(matrix.array, i, j);
-                if (0 == (product(moved, target.array))) {
-                    Matrix merged = new Matrix(merge(moved, target.array));
-                    r.add(merged);
-                    merged.keys = new HashSet<>();
-                    merged.keys.add(matrix.elementKey);
-                    merged.solutions = new HashSet<>();
-                    merged.solutions.add(new Matrix(moved));
+                int[][] moved = move(matrix, i, j);
+                if (sum(moved) == sum && 0 == (product(moved, target))) {
+                    r.add(arrayToLong(moved));
                 }
             }
         }
@@ -287,27 +263,37 @@ public class MatrixUtil {
     }
 
     public static Matrix cartesianProduct(Matrix a, Matrix b) {
-        if (null == a.possiblePlacements || null == b.possiblePlacements || a.possiblePlacements.size() <= 0 || b.possiblePlacements.size() <= 0) {
-            throw new RuntimeException();
-        }
+//        if (null == a.solutions || null == b.solutions || a.solutions.size() <= 0 || b.solutions.size() <= 0) {
+//            throw new RuntimeException();
+//        }
         Matrix r = new Matrix();
         r.keys = new HashSet<>();
         r.keys.addAll(a.keys);
         r.keys.addAll(b.keys);
-        for (Matrix aa : a.possiblePlacements) {
-            for (Matrix bb : b.possiblePlacements) {
-                if (9 == product(aa.array, bb.array)) { // fixed dots
-                    Matrix merged = new Matrix(merge(aa.array, bb.array));
-                    if (null == r.possiblePlacements) {
-                        r.possiblePlacements = new LinkedList();
-                    }
-                    r.possiblePlacements.add(merged);
-                    r.possibility++;
-                    merged.keys = r.keys;
-                    merged.solutions = new HashSet<>();
-                    merged.solutions.addAll(aa.solutions);
-                    merged.solutions.addAll(bb.solutions);
-                }
+        return r;
+    }
+
+    public static long arrayToLong(int[][] a) {
+        if (isEmpty(a)) {
+            return 0;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (int[] aa : a) {
+            for (int aaa : aa) {
+                sb.append(aaa);
+            }
+        }
+        long r = Long.parseLong(sb.toString(), 2);
+        return r;
+        // Long.parseLong(sb.toString(), 2)
+    }
+
+    // 8 * 7
+    public static int[][] longToArray(long a) {
+        int[][] r = new int[8][7];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 7; j++) {
+                r[i][j] = (1L << (55 - 7 * i - j) & a) > 0 ? 1 : 0;
             }
         }
         return r;
