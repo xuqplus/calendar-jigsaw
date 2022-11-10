@@ -63,7 +63,7 @@ public class Main {
     }};
 
     public static void main(String[] args) {
-        String input = "11/05/2022"; // MM/DD/YYYY
+        String input = "11/11/2022"; // MM/DD/YYYY
         int[][] target = getTargetMatrix(input);
         System.out.println("--target--");
         print(target);
@@ -123,8 +123,9 @@ public class Main {
                                             for (Long j : jj) {
                                                 if ((i0 & j) == 0) {
                                                     Object[] r = Arrays.asList(a, b, c, d, e, f, g, h, i, j).stream().sorted().toArray();
-                                                    System.out.println(String.format("Got NO.%s result > %sL, %sL, %sL, %sL, %sL, %sL, %sL, %sL, %sL, %sL", rr.size(), r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9]));
                                                     rr.add(r);
+                                                    System.out.println(String.format("Got NO.%s result >", rr.size()));
+                                                    printSolution(target, r);
                                                 }
                                             }
                                         }
@@ -186,7 +187,29 @@ public class Main {
         }
     }
 
-    public static void print(Matrix a) {
-        print(MatrixUtil.longToArray(a.array2d));
+    public static void printSolution(int[][] target, Object... r) {
+        if (MatrixUtil.isEmpty(target)) {
+            return;
+        }
+        char[][] pp = new char[target.length][target[0].length];
+        List<int[][]> rr = new LinkedList<>();
+        rr.add(target);
+        for (Object o : r) {
+            rr.add(MatrixUtil.longToArray((Long) o));
+        }
+        int p1 = 0;
+        for (int[][] p : rr) {
+            for (int i = 0; i < target.length; i++) {
+                for (int j = 0; j < target[0].length; j++) {
+                    if (0 != p[i][j]) {
+                        pp[i][j] = (char) ('`' + p1);
+                    }
+                }
+            }
+            p1++;
+        }
+        for (char[] p : pp) {
+            System.out.println(Arrays.toString(p));
+        }
     }
 }
